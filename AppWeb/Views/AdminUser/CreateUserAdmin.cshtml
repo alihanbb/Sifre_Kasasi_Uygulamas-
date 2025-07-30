@@ -1,0 +1,22 @@
+﻿@model CreateUserDto
+
+@{
+    ViewData["Title"] = "CreateUserAdmin";
+    Layout = "~/Views/AdminUserLayout/_AdminUserLayout.cshtml";
+}
+
+<form method="post">
+    <label>Site İsmi</label>
+    <input type="text" asp-for="WebSiteName" class="form-control" />
+	<span asp-validation-for="WebSiteName" class="text-danger"></span>
+    <br />
+    <label>Kullanıcı Adı</label>
+    <input type="text" asp-for="WebUserName" class="form-control" />
+	<span asp-validation-for="WebUserName" class="text-danger"></span>
+    <br />
+    <label>Şifre</label>
+    <input type="text" asp-for="WebPassword" class="form-control" />
+	<span asp-validation-for="WebPassword" class="text-danger"></span>
+    <br />
+    <button class="btn btn-primary">Bilgileri Kaydet</button>
+</form>

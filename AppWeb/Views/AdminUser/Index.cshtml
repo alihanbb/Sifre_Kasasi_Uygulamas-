@@ -1,0 +1,30 @@
+﻿@model List<ResultUserDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/AdminUserLayout/_AdminUserLayout.cshtml";
+    int count = 0;
+}
+
+<table class="table table-bordered">
+    <tr>
+        <th>#</th>
+        <th>Web Site İsmi</th>
+        <th>Şifre</th>
+        <th>Kullanıcı Adı</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+		count++;
+        <tr id="row_@item.Id">
+            <th>@count</th>
+            <td>@item.WebSiteName</td>
+            <td>@item.WebPassword</td>
+            <td>@item.WebUserName</td>
+            <td><a href="/AdminUser/DeleteUserAdmin/@item.Id" onclick="deleteUser(@item.Id)" class="btn mb-1 btn-rounded btn-outline-danger">Sil</a></td>
+            <td><a href="/AdminUser/UpdateUserAdmin/@item.Id" class="btn mb-1 btn-rounded btn-outline-success">Güncelle</a></td>
+          
+        </tr>
+    }
+</table>
+<a href="/AdminUser/CreateUserAdmin/" class="btn mb-1 btn-rounded btn-outline-info">Yeni Kullanıcı Girişi</a>
+
