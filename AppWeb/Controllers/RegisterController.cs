@@ -10,11 +10,13 @@ namespace AppWeb.Controllers
     {
         private readonly IRegisterService registerService;
         private readonly ILogger<RegisterController> logger;
+  
 
         public RegisterController(IRegisterService registerService, ILogger<RegisterController> logger)
         {
             this.registerService = registerService;
             this.logger = logger;
+            
         }
 
         [HttpGet]
@@ -23,13 +25,9 @@ namespace AppWeb.Controllers
             return View();
         }
 
-        [HttpPost]  
+        [HttpPost]
         public async Task<IActionResult> Index(RegisterDtos register)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(register);
-            }
             if (!await registerService.IsValidAsync(register))
             {
                 ModelState.AddModelError(string.Empty, "Kullanıcı adı veya e-posta zaten kayıtlı.");

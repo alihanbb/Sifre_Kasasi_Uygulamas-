@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppWeb.Controllers
 {
+  
     public class AdminUserLayoutController : Controller
     {
         public IActionResult _AdminUserLayout()

@@ -1,11 +1,12 @@
 ﻿using AppEntity.Dtos.UserDto;
 using AppService.Services.Abstract;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppWeb.Controllers
 {
-
+    
     public class AdminUserController : Controller
     {
         private readonly IUserService userService;
@@ -69,7 +70,7 @@ namespace AppWeb.Controllers
         {   
             await userService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
-           // return Json(new { success = true });
+           
         }
     }
 

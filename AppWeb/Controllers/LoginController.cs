@@ -1,7 +1,6 @@
 ﻿using AppEntity.Dtos.LoginDto;
 using AppService.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppWeb.Controllers
@@ -25,18 +24,7 @@ namespace AppWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(LoginDtos loginDto)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View();
-            //}
-            //var result = await loginService.LoginAsync(loginDtos);
-            //if (result.Succeeded)
-            //{
-            //    return RedirectToAction("Index", "AdminUser");
-            //}
-            //var error = new IdentityError { Description = "Kullanıcı adı veya şifre hatalı" };
-            //ModelState.AddModelError(string.Empty, error.Description);
-            //return View();
+           
             if (!ModelState.IsValid) return View();
 
             var user = await loginService.GetUserByUsernameAsync(loginDto.UserName);

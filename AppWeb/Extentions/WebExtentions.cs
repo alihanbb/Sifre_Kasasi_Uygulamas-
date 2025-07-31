@@ -1,9 +1,9 @@
 ﻿using AppData.Context;
 using AppEntity.Entities;
 using AppService.Describer;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppWeb.Extentions
 {
@@ -11,16 +11,28 @@ namespace AppWeb.Extentions
     {
         public static IServiceCollection AddWebExtentions(this IServiceCollection services)
         {
-            
-            services.AddMvc(config =>
+            services.AddControllersWithViews(options =>
             {
-                var policy = new AuthorizationPolicyBuilder()
-                                .RequireAuthenticatedUser()
-                                .Build();
-
-                config.Filters.Add(new AuthorizeFilter(policy));
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
+            services.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                options.ValidationInterval = TimeSpan.FromMinutes(30);
+
+            });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.Events.OnRedirectToLogin = context =>
+                {
+                   context.Response.StatusCode = 404;
+                   context.Response.Redirect("/ErrorPage/Index");
+                   return Task.CompletedTask;
+                };
+            });
+            services.AddAuthorization();
 
             services.AddIdentity<AppUser, AppRole>(options =>
             {
