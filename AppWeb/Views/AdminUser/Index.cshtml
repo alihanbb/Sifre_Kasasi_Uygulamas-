@@ -5,26 +5,60 @@
     int count = 0;
 }
 
+@Html.AntiForgeryToken()  <!-- Tokenu buraya ekledik -->
+
 <table class="table table-bordered">
     <tr>
         <th>#</th>
         <th>Web Site İsmi</th>
         <th>Şifre</th>
         <th>Kullanıcı Adı</th>
+        <th>İşlemler</th>
     </tr>
     @foreach (var item in Model)
     {
-		count++;
+        count++;
         <tr id="row_@item.Id">
             <th>@count</th>
             <td>@item.WebSiteName</td>
             <td>@item.WebPassword</td>
             <td>@item.WebUserName</td>
-            <td><a href="/AdminUser/DeleteUserAdmin/@item.Id" onclick="deleteUser(@item.Id)" class="btn mb-1 btn-rounded btn-outline-danger">Sil</a></td>
-            <td><a href="/AdminUser/UpdateUserAdmin/@item.Id" class="btn mb-1 btn-rounded btn-outline-success">Güncelle</a></td>
-          
+            <td>
+                <button type="button" onclick="deleteUser('@item.Id')" class="btn mb-1 btn-rounded btn-outline-danger">Sil</button>
+                <a href="/AdminUser/UpdateUserAdmin/@item.Id" class="btn mb-1 btn-rounded btn-outline-success">Güncelle</a>
+            </td>
         </tr>
     }
 </table>
 <a href="/AdminUser/CreateUserAdmin/" class="btn mb-1 btn-rounded btn-outline-info">Yeni Kullanıcı Girişi</a>
 
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function deleteUser(id) {
+            
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
+            $.ajax({
+                url: '/AdminUser/DeleteUserAdmin',
+                type: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'RequestVerificationToken': token
+                },
+                data: JSON.stringify(id),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $("#row_" + id).remove();
+                    } else {
+                        alert("Silme işlemi başarısız: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Sunucuya bağlanırken hata oluştu.");
+                }
+            });
+        }
+    </script>
+}

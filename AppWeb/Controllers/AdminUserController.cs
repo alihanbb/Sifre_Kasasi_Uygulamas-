@@ -31,15 +31,16 @@ namespace AppWeb.Controllers
         }
 
         [HttpPost]
-  
-        public async Task<IActionResult> CreateUserAdmin(CreateUserDto createUser)
+        public async Task<IActionResult> CreateUserAdmin([FromBody] CreateUserDto createUser)
         {
             if (ModelState.IsValid)
             {
                 await userService.CreateAsync(createUser);
-                return RedirectToAction(nameof(Index));
+               // return RedirectToAction(nameof(Index));
+               return Json(new { success = true, message = "User created successfully" });
             }
-            return View(createUser);
+            //return View(createUser);
+            return Json(new { success = false, message = "Invalid data" });
         }
 
         [HttpGet]
@@ -55,22 +56,24 @@ namespace AppWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateUserAdmin(UpdateUserDto updateUser)
+        public async Task<IActionResult> UpdateUserAdmin([FromBody]UpdateUserDto updateUser)
         {
             if (ModelState.IsValid)
             {
                 await userService.UpdatesAsync(updateUser);
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "User updated successfully" });
             }
-            return View(updateUser);
+            //return View(updateUser);
+            return Json(new { success = false, message = "Invalid data" });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> DeleteUserAdmin(Guid id)
+        [HttpPost]
+        public async Task<IActionResult> DeleteUserAdmin([FromBody]Guid id)
         {   
             await userService.DeleteAsync(id);
-            return RedirectToAction(nameof(Index));
-           
+            //return RedirectToAction(nameof(Index));
+           return Json(new { success = true, message = "User deleted successfully" });
         }
     }
 

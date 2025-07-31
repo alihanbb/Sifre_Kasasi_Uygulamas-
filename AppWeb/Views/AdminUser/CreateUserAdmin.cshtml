@@ -5,18 +5,65 @@
     Layout = "~/Views/AdminUserLayout/_AdminUserLayout.cshtml";
 }
 
-<form method="post">
+<form method="post" id="createUserForm">
+    @Html.AntiForgeryToken()
     <label>Site İsmi</label>
     <input type="text" asp-for="WebSiteName" class="form-control" />
-	<span asp-validation-for="WebSiteName" class="text-danger"></span>
+    <span asp-validation-for="WebSiteName" class="text-danger"></span>
     <br />
     <label>Kullanıcı Adı</label>
     <input type="text" asp-for="WebUserName" class="form-control" />
-	<span asp-validation-for="WebUserName" class="text-danger"></span>
+    <span asp-validation-for="WebUserName" class="text-danger"></span>
     <br />
     <label>Şifre</label>
     <input type="text" asp-for="WebPassword" class="form-control" />
-	<span asp-validation-for="WebPassword" class="text-danger"></span>
+    <span asp-validation-for="WebPassword" class="text-danger"></span>
     <br />
     <button class="btn btn-primary">Bilgileri Kaydet</button>
 </form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#createUserForm").submit(function (e) {
+                e.preventDefault();
+
+                var token = $('input[name="__RequestVerificationToken"]').val();
+
+                var data = {
+                    WebSiteName: $("input[name='WebSiteName']").val(),
+                    WebUserName: $("input[name='WebUserName']").val(),
+                    WebPassword: $("input[name='WebPassword']").val()
+                };
+
+                $.ajax({
+                    url: '/AdminUser/CreateUserAdmin',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        'RequestVerificationToken': token
+                    },
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            window.location.href = '/AdminUser/Index';
+                        } else if (response.errors) {
+                            alert("Hatalar: " + response.errors.join(", "));
+                        } else {
+                            alert("Bir hata oluştu: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Sunucuya bağlanırken hata oluştu.");
+                    }
+                });
+            });
+        });
+    </script>
+}
+ 
