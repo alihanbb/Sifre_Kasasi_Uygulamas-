@@ -2,8 +2,10 @@
 using AppEntity.Entities;
 using AppService.Describer;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace AppWeb.Extentions
 {
@@ -22,17 +24,12 @@ namespace AppWeb.Extentions
 
             });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
+
+            services.AddMvc(config =>
             {
-                options.Events.OnRedirectToLogin = context =>
-                {
-                   context.Response.StatusCode = 404;
-                   context.Response.Redirect("/ErrorPage/Index");
-                   return Task.CompletedTask;
-                };
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
             });
-            services.AddAuthorization();
 
             services.AddIdentity<AppUser, AppRole>(options =>
             {
