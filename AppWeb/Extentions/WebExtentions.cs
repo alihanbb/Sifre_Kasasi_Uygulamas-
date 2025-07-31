@@ -1,7 +1,6 @@
 ﻿using AppData.Context;
 using AppEntity.Entities;
 using AppService.Describer;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +26,9 @@ namespace AppWeb.Extentions
 
             services.AddMvc(config =>
             {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                var policy = new AuthorizationPolicyBuilder()
+                            .RequireAuthenticatedUser()
+                            .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
 
